@@ -1,0 +1,326 @@
+/* ---------- HOWL THEME ---------- */
+
+.lastactive {
+  float: right;
+  color: #999999;
+
+  margin-top: 14px;
+
+  font-size: 50%;
+  font-weight: normal;
+  text-align: bottom;
+  line-height: 1;
+}
+
+.wellname {
+  color: #BBBBBB;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+.grey {
+  color: #BBB;
+}
+
+.bold {
+  font-weight: bold;
+} 
+
+.busy {
+  background-image: url("../img/spinner.gif");
+  /*
+  background-color: #EFEFEF;
+  border: 1px solid #DEDEDE;
+  */
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  opacity: 0.5;
+}
+
+.stats {
+  background-color: #EEE;
+  background-image: url("../img/stats.png");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  opacity: 0.5;
+}
+
+.failed {
+  background-color: #EEE;
+  background-image: url("../img/error.png");
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  opacity: 0.5;
+
+  text-align: center;
+}
+
+/*
+.failed:before {
+  font-family: "Glyphicons Halflings";
+  content: "\e088";
+  opacity: 0.3;
+}
+*/
+
+span.disabled {
+  background-color: #F8F8F8; 
+  text-align: center;
+}
+
+span.disabled:before {
+  opacity: 0.3;
+  font-weight: bold;
+  content: "/";
+}
+
+.rawtextblock {
+  font-size: 12px;
+}
+
+.graph-container {
+  height: 215px;
+  margin-bottom: 30px;
+}
+
+.howlstatus-default {border-top: 3px solid #CCC;}
+.howlstatus-ok {border-top: 3px solid #5CB85C;}
+.howlstatus-warn {border-top: 3px solid #F0AD4E;}
+.howlstatus-error {border-top: 3px solid #D9534F;}
+
+/* ---------- HOWL BOOTSTRAP EXTENSION ---------- */
+
+.badge-primary{background-color:#428BCA;}
+.badge-success{background-color:#5CB85C;}
+.badge-info{background-color:#5BC0DE;}
+.badge-warning{background-color:#F0AD4E;}
+.badge-danger{background-color:#D9534F;}
+
+.panel-dark {
+  border-color: #CCCCCC;
+}
+
+.panel-dark > .panel-heading {
+  background-color: #E5E5E5;
+  border-color: #CCCCCC;
+}
+
+.panel-warning > .panel-heading {
+  background-color: #F0AD4E;
+  color: #FFFFFF;
+}
+
+.well .list-group {
+  margin-bottom: 0;
+}
+
+.panel-graph {
+  padding: 0;
+}
+
+hr {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.nav > li > a {
+  padding: 10px 10px;
+}
+
+.nav-tabs > li > a {
+  padding: 3px 10px;
+}
+
+/* ---------- CUBISM.JS ---------- */
+
+.group {
+  margin-bottom: 1em;
+}
+
+.axis {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+.axis text {
+  -webkit-transition: fill-opacity 250ms linear;
+  fill: #333;
+}
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  stroke: #666;
+  shape-rendering: crispEdges;
+}
+
+.axis.top {
+  background-image: linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -o-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -moz-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -webkit-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -ms-linear-gradient(top, #fff 0%, rgba(255,255,255,0) 100%);
+}
+
+.axis.bottom {
+  background-image: linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -o-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -moz-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -webkit-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+  background-image: -ms-linear-gradient(bottom, #fff 0%, rgba(255,255,255,0) 100%);
+  bottom: 0px;
+  padding: 24px 0 0 0;
+}
+
+.horizon {
+  overflow: hidden;
+  position: relative;
+}
+
+.horizon {
+  border-top: solid 1px #666;
+  border-bottom: solid 1px #666;
+}
+
+.horizon + .horizon {
+  border-top: none;
+}
+
+.horizon canvas {
+  display: block;
+}
+
+.horizon .title,
+.horizon .value {
+  bottom: 0;
+  line-height: 30px;
+  margin: 0 6px;
+  position: absolute;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  white-space: nowrap;
+}
+
+.horizon .title {
+  left: 0;
+}
+
+.horizon .value {
+  right: 0;
+}
+
+.line {
+  background: #666;
+  z-index: 2;
+}
+
+.graph-small-container .horizon {
+  border: 0px;
+}
+
+/* ---------- STICKY FOOTER ---------- */
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+/* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 940px;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+} 
+
+/* ---------- JUMBOTRON THEME ---------- */
+
+/* Space out content a bit */
+body {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Custom page header */
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 15px;
+}
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+  padding-bottom: 10px;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Customize container */
+@media (min-width: 768px) {
+  .container {
+    max-width: 970px;
+  }
+}
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.jumbotron .btn {
+  font-size: 21px;
+  padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+  margin: 40px 0;
+}
+.marketing p + h4 {
+  margin-top: 28px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 20px;
+  }
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
