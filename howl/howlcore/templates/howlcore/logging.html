@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}logging{% endblock %}
+
+{% block content %}
+
+<div class="wellname">info.log</div>
+<div class="well rawtextblock"  
+    {% for line in log %}
+        {{ line }} <br/>
+    {% endfor %}
+</div>
+
+{% endblock %}

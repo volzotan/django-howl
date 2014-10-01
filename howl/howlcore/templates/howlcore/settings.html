@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}settings{% endblock %}
+
+{% block content %}
+
+{% load math %}
+{% load howlcore %}
+
+ <div class="btn-group">
+    <a href="{% url 'howlcore' %}" type="button" class="btn btn-default">trigger check for responding devices</a>
+    <a href="{% url 'howlcore' %}" type="button" class="btn btn-default">foo</a>
+</div>
+
+<br/><br/>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="wellname">Installed Apps</div>
+
+            {% for app in modellist %}
+            {% if forloop.counter0 < modellist|length|div:"2" %}
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ app.obj.verbose_name }}</div>
+                <div class="panel-body">
+
+
+                {% for model in app.children %}
+                {% if model.children %}
+                    <div class="wellname">{{ model.modelname }}</div>
+                    <div class="list-group">
+                        {% for elem in model.children %}
+                            <span class="list-group-item">
+                                {% if model.is_device %}
+                                    {% statustype elem.status %}
+                                {% endif %}
+                                {{ elem.name }}
+                            </span>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+    </div>
+
+    <div class="col-md-6">
+        <div class="wellname">&nbsp</div>
+
+            {% for app in modellist %}
+            {% if forloop.counter0 >= modellist|length|div:"2" %}
+            <div class="panel panel-default">
+                <div class="panel-heading">{{ app.obj.verbose_name }}</div>
+                <div class="panel-body">
+
+
+                {% for model in app.children %}
+                {% if model.children %}
+                    <div class="wellname">{{ model.modelname }}</div>
+                    <div class="list-group">
+                        {% for elem in model.children %}
+                            <span class="list-group-item">
+                                {% if model.is_device %}
+                                    {% statustype elem.status %}
+                                {% endif %}
+                                {{ elem.name }}
+                            </span>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

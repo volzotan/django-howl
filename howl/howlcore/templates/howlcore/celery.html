@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}celery{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="wellname">registered</div>
+        <div class="list-group">
+
+            {% if celery_registered %}
+                {% for elem in celery_registered %}
+                     <span class="list-group-item">
+                        {{elem}}
+                    </span>
+                {% endfor %}
+            {% else %}
+                <span class="list-group-item disabled"></span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="wellname">scheduled</div>
+        <div class="list-group">
+            {% if celery_scheduled %}
+                {% for elem in celery_scheduled %}
+                     <span class="list-group-item">
+                        {{elem}}
+                    </span>
+                {% endfor %}
+            {% else %}
+                <span class="list-group-item disabled"></span>
+            {% endif %}
+        </div>
+
+        <div class="wellname">active</div>
+        <div class="list-group">
+            {% if celery_active %}
+                {% for elem in celery_active %}
+                    <span class="list-group-item">
+                        {{elem.name}}
+                    </span>
+                {% endfor %}
+            {% else %}
+                <span class="list-group-item disabled"></span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="wellname">stats</div>
+    </div>
+
+</div>
+
+{% endblock %}

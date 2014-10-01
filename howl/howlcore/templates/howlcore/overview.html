@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}howl{% endblock %}
+
+{% block content %}
+
+{% load math %}
+
+<!--
+<div class="well well-sm">
+    statistics
+</div>
+-->
+
+<div class="row">
+    <div class="col-md-6">
+
+        {% for app in apps %}
+            {% if forloop.counter0 < apps|length|div:"2" %}
+                {% include app.name|add:"/snippet.html" %}
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <div class="col-md-6">
+
+        {% for app in apps %}
+            {% if forloop.counter0 >= apps|length|div:"2" %}
+                {% include app.name|add:"/snippet.html" %}
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
