@@ -1,0 +1,57 @@
+{% if models.roomsensor.Roomsensor %}
+
+{% load staticfiles %}
+
+<div class="wellname">roomsensor</div>
+<div class="list-group">
+
+    {% for elem in models.roomsensor.Roomsensor %}
+        <div class="list-group-item hidden-xs hidden-sm" style="padding: 0px;">
+            <div class="graph-small-container graph-container-{{elem.name}} stats" style="height: 90px;">
+                <div class="graphs-{{elem.name}}"></div>
+            </div>
+        </div>
+
+        <a href="{% url 'roomsensor_display' elem.name %}" class="list-group-item">
+            <span class="badge badge-primary"><span rel="tooltip" title="Humidity">{{elem.humidity}}%</span></span>
+            <span class="badge badge-danger"><span rel="tooltip" title="Temperature">{{elem.temperature}}°C</span></span>
+            <span class="badge badge-warning"><span rel="tooltip" title="Luminosity">{{elem.luminosity}}</span></span>
+            {% if elem.status > 1 %}
+              <span style="float: right; padding-right: 10px; color: #D9534F;"><span rel="tooltip" title="{{elem.get_status_display}}"><span class="glyphicon glyphicon-record"></span></span></span>
+            {% endif %}
+            {{elem.name}}
+            
+        </a>
+    {% endfor %}
+</div>
+
+<script src="{% static "js/d3.min.js" %}" type="text/javascript"></script>
+<script src="{% static "roomsensor/js/cubism.v1.min.js" %}" type="text/javascript"></script>
+<script src="{% static "roomsensor/js/roomsensor.js" %}" type="text/javascript"></script>
+
+<script type="text/javascript">
+  var settings = {
+    "luminosity": {
+      colors: ["#DDDDDD","#F0AD4E"],
+      extent: [0, 700],
+      height: [30]
+    },
+
+    "temperature": {
+      colors: ["#DDDDDD","#D9534F"],
+      extent: [18, 36],
+      height: [30]
+    },
+
+    "humidity": {
+      colors: ["#DDDDDD","#428BCA"],
+      extent: [20, 50],
+      height: [30]
+    }
+  }
+  {% for elem in models.roomsensor.Roomsensor %}
+    prepare_and_draw("{{elem.name}}", 453, 2);
+  {% endfor %}
+</script>
+
+{% endif %}

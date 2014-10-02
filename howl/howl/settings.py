@@ -51,7 +51,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'howlcore'
+    'howlcore',
+    'roomsensor',
+    'mongodb'
 )
 
 MIDDLEWARE_CLASSES = (

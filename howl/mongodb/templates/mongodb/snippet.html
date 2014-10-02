@@ -1,0 +1,14 @@
+{% if models.mongodb.Mongodb %}
+<div class="wellname">mongodb</div>
+<div class="list-group">
+
+    {% for elem in models.mongodb.Mongodb %}
+        <a href="{% url 'mongodb_display' elem.name %}" class="list-group-item">
+            <span style="float: right; color: #CCC" rel="tooltip" title="documents">{{elem.document_count}}</span>
+            <span style="float: right; color: #CCC" rel="tooltip" title="last active">{{elem.last_active|date:"H:i"}} |&nbsp</span>
+            {{elem.name}}
+        </a>
+    {% endfor %}
+
+</div>
+{% endif %}

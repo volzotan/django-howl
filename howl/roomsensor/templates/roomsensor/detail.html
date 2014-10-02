@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}roomsensor: {{roomsensor.name}}{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h2>Roomsensor <small>{{roomsensor.name}}</small>
+    <span style="float: right; color: #CCC" rel="tooltip" title="{{roomsensor.last_active|date:"H:i, d. F Y"}}">
+        <span class="lastactive">{{roomsensor.last_active|date:"H:i"}}</span>
+    </span>
+
+    <div class="" style="float: right; margin-right: 10px;">
+      <div class="btn-group btn-group-xs">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+       <span class="glyphicon glyphicon-cog"></span>
+       <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <li><a href="{% url 'roomsensor_read' roomsensor.name %}"><span class="glyphicon glyphicon-repeat"></span>&nbsp&nbsp trigger manual read</a></li>
+      </ul>
+    </div>
+    </div>
+
+    <div class="hidden-xs hidden-sm" style="float: right; margin-right: 10px;">
+      <div class="btn-group btn-group-xs graph-buttons">
+        <button type="button" class="btn btn-default" value="1">1x</button>
+        <button type="button" class="btn btn-default active" value="2">2x</button>
+        <button type="button" class="btn btn-default" value="4">4x</button>
+        <button type="button" class="btn btn-default" value="8">8x</button>
+        <button type="button" class="btn btn-default" value="16">16x</button>
+        <button type="button" class="btn btn-default" value="32">32x</button>
+      </div>
+    </div>
+
+  </h2>
+</div>
+
+{% load staticfiles %}
+
+
+<div class="hidden-xs hidden-sm">
+  <div class="graph-container graph-container-{{roomsensor.name}} stats">
+    <div class="graphs-{{roomsensor.name}}"></div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-md-4">
+    <div class="panel panel-dark">
+      <div class="panel-heading">
+        <h3 class="panel-title">Luminosity <span class="badge badge-warning" style="float: right;">&nbsp</span></h3>
+      </div>
+      <div class="panel-body">
+        {{roomsensor.luminosity}}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="panel panel-dark">
+      <div class="panel-heading">
+        <h3 class="panel-title">Temperature <span class="badge badge-danger" style="float: right;">&nbsp</span></h3>
+      </div>
+      <div class="panel-body">
+        {{roomsensor.temperature}} °C
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="panel panel-dark">
+      <div class="panel-heading">
+        <h3 class="panel-title">Humidity <span class="badge badge-primary" style="float: right;">&nbsp</span></h3>
+      </div>
+      <div class="panel-body">
+        {{roomsensor.humidity}} %
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<script src="{% static "js/d3.min.js" %}" type="text/javascript"></script>
+<script src="{% static "roomsensor/js/cubism.v1.min.js" %}" type="text/javascript"></script>
+<script src="{% static "roomsensor/js/roomsensor.js" %}" type="text/javascript"></script>
+
+<script type="text/javascript">
+  window.onload = function() {
+    $(".graph-buttons button").click(function() {
+      $("button").removeClass("active");
+      $(this).addClass("active");
+      var val = $(this).attr("value");
+      $(".graphs-{{roomsensor.name}}").children().remove();
+      $(".graph-container-{{roomsensor.name}} .rule").remove();
+      $(".graph-container-{{roomsensor.name}}").addClass("busy");
+      prepare_and_draw("{{roomsensor.name}}", 940, val);
+    });
+  }
+
+  var settings = {
+    "luminosity": {
+      colors: ["#DDDDDD","#F0AD4E"],
+      extent: [0, 700],
+      height: [60]
+    },
+
+    "temperature": {
+      colors: ["#DDDDDD","#D9534F"],
+      extent: [18, 36],
+      height: [60]
+    },
+
+    "humidity": {
+      colors: ["#DDDDDD","#428BCA"],
+      extent: [20, 50],
+      height: [60]
+    },
+
+    "ruler": true,
+    "timeline": true
+  }
+  
+  prepare_and_draw("{{roomsensor.name}}", 940, 2);
+</script>
+
+{% endblock %}

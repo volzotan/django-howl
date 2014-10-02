@@ -1,3 +1,5 @@
 settings_local.py
 .idea
 howl/howlcore/migrations
+howl/roomsensor/fixtures
+howl/mongodb/fixtures

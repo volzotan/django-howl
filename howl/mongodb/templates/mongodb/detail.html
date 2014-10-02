@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}mongodb detail{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h2>MongoDB<small> {{mongodb.name}}</small><span style="float: right; color: #CCC" rel="tooltip" title="{{mongodb.last_active|date:"H:i, d. F Y"}}"><span class="lastactive">{{mongodb.last_active|date:"H:i"}}</span></span></h2>
+</div>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        {% if mongodb.is_responding %}
+            <span class="label label-success">is responding</span>
+        {% else %}
+            <span class="label label-danger">not responding</span>
+        {% endif %}
+    </li>
+</ul>
+
+{% endblock %}

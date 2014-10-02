@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}roomsensor{% endblock %}
+
+{% block content %}
+
+{% load math %}
+
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="list-group">
+            {% for elem in roomsensor_list %}
+                <a href="{% url 'roomsensor_display' elem.name %}" class="list-group-item">
+                    <span class="badge badge-primary"><span rel="tooltip" title="Humidity">{{elem.humidity}}%</span></span>
+                    <span class="badge badge-danger"><span rel="tooltip" title="Temperature">{{elem.temperature}}°C</span></span>
+                    <span class="badge badge-warning"><span rel="tooltip" title="Luminosity">{{elem.luminosity}}</span></span>
+                    {{elem.name}}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

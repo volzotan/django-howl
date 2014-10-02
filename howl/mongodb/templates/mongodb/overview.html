@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}mongodb{% endblock %}
+
+{% block content %}
+
+<div class="wellname">collections</div>
+<div class="list-group">
+    {% if mongodb_list %}
+        {% for elem in mongodb_list %}
+            <a href="{% url 'mongodb_display' elem.name %}" class="list-group-item">
+                {{elem.name}}
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="list-group">
+            <span class="list-group-item disabled"></span>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
