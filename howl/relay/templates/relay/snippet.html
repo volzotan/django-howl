@@ -1,0 +1,16 @@
+{% if models.relay.Relay %}
+<div class="wellname">relay</div>
+<div class="list-group">
+
+    {% for elem in models.relay.Relay %}
+        <li class="list-group-item ajaxbtn">
+            <div class="btn-group btn-group-xs" style="float: right;" rel="tooltip" data-placement="left" title="switch">
+                <a href="{% url 'relay_switch' elem.name 'on' %}" type="button" class="btn btn-default">ON</a>
+                <a href="{% url 'relay_switch' elem.name 'off' %}" type="button" class="btn btn-default">OFF</a>
+            </div>
+            {{elem.name}}
+        </li>
+    {% endfor %}
+
+</div>
+{% endif %}

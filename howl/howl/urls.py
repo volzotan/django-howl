@@ -12,7 +12,8 @@ urlpatterns = patterns('',
     url(r'^roomsensor/', include('roomsensor.urls')),
     url(r'^mongodb/', include('mongodb.urls')),
     url(r'^forecast/', include('forecast.urls')),
-    url(r'^inkdisplay/', include('inkdisplay.urls'))
+    url(r'^inkdisplay/', include('inkdisplay.urls')),
+    url(r'^relay/', include('relay.urls'))
 )
 
 core.init()
