@@ -10,7 +10,9 @@ urlpatterns = patterns('',
     url(r'^$', include('howlcore.urls')),
     url(r'^core/', include('howlcore.urls')),
     url(r'^roomsensor/', include('roomsensor.urls')),
-    url(r'^mongodb/', include('mongodb.urls'))
+    url(r'^mongodb/', include('mongodb.urls')),
+    url(r'^forecast/', include('forecast.urls')),
+    url(r'^inkdisplay/', include('inkdisplay.urls'))
 )
 
 core.init()

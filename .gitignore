@@ -3,3 +3,4 @@ settings_local.py
 howl/howlcore/migrations
 howl/roomsensor/fixtures
 howl/mongodb/fixtures
+howl/forecast/fixtures

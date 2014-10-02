@@ -53,7 +53,9 @@ INSTALLED_APPS = (
 
     'howlcore',
     'roomsensor',
-    'mongodb'
+    'mongodb',
+    'forecast',
+    'inkdisplay'
 )
 
 MIDDLEWARE_CLASSES = (

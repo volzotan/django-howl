@@ -1,0 +1,125 @@
+{% if models.forecast.Forecast %}
+
+{% load staticfiles %}
+<link href="{% static "forecast/css/weather-icons.css" %}" rel="stylesheet">
+<link href="{% static "forecast/css/forecast.css" %}" rel="stylesheet">
+
+<div class="wellname">forecast</div>
+<div class="list-group">
+
+    {% for elem in models.forecast.Forecast %}
+        <!-- regular sized displays -->
+        <li class="list-group-item hidden-xs hidden-sm">
+            <div class="row">
+                <div class="col-md-3">
+                    <div style="padding: 10px; text-align: center;">
+                        <i class="wi-{{elem.icon_today}}" style="font-size: 50px"></i>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div style="padding-top: 22px; font-size: 15px; font-weight: bold;" rel="tooltip" title="sunrise/set">
+                    {{elem.sunrise|date:"H:i"}} {{elem.sunset|date:"H:i"}}
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div style="padding-top: 32px; font-size: 15px; font-weight: bold; text-align: right;" rel="tooltip" title="rainprobability">
+                    {{elem.rainprobability_today|stringformat:"d"}}%
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div style="padding-top: 32px; font-size: 15px; font-weight: bold; text-align: right;" rel="tooltip" title="windspeed">
+                    {{elem.windspeed_today|floatformat:"1"}}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div style="padding: 12px 20px 0 0; font-size: 25px; font-weight: bold; text-align: right; line-height: 1.2;" rel="tooltip" title="temperature min/max">
+                    {{elem.temp_min_today|floatformat:"1"}}<br/>
+                    {{elem.temp_max_today|floatformat:"1"}}
+                    </div>
+                </div>
+            </div>
+            <hr style="margin-bottom: 8px;" />
+            <div class="row">
+                <div class="col-md-3">
+                    <div style="text-align: center;">
+                        <span class="wi-{{elem.icon_tomorrow}}">&nbsp</span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-2">
+                    <div style="text-align: right;" rel="tooltip" title="rainprobability" data-placement="bottom">
+                        {{elem.rainprobability_tomorrow|stringformat:"d"}}%
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div style="text-align: right;" rel="tooltip" title="windspeed" data-placement="bottom">
+                        {{elem.windspeed_tomorrow|floatformat:"1"}}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div style="padding-right: 10px; text-align: right;" rel="tooltip" title="temperature min/max" data-placement="bottom">
+                        {{elem.temp_min_tomorrow|floatformat:"1"}} / {{elem.temp_max_tomorrow|floatformat:"1"}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- xs / sm sized displays -->
+            <li class="list-group-item hidden-md hidden-lg" style="text-align: center;">
+            <div class="row">
+                <div class="col-md-3">
+                    <div style="">
+                        <i class="wi-{{elem.icon_today}}" style="font-size: 50px"></i>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div style="" rel="tooltip" title="sunrise/set">
+                    {{elem.sunrise|date:"H:i"}} {{elem.sunset|date:"H:i"}}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <span>rain:</span>  
+                    <span class="bold" rel="tooltip" title="rainprobability">
+                    {{elem.rainprobability_today|stringformat:"d"}}%
+                    </span>
+                    <span>wind:</span>  
+                    <span class="bold" rel="tooltip" title="windspeed">
+                    {{elem.windspeed_today|floatformat:"1"}}
+                    </span>
+                </div>
+                <div class="col-md-3">
+                    <div style="" rel="tooltip" title="temperature min/max">
+                    {{elem.temp_min_today|floatformat:"1"}} - 
+                    {{elem.temp_max_today|floatformat:"1"}}
+                    </div>
+                </div>
+            </div>
+            <hr style="margin-bottom: 8px;" />
+            <div class="row">
+                <div class="col-md-4">
+                    <div style="">
+                        <span class="wi-{{elem.icon_tomorrow}}">&nbsp</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <span>rain:</span> 
+                    <span class="bold" rel="tooltip" title="rainprobability">
+                    {{elem.rainprobability_tomorrow|stringformat:"d"}}%
+                    </span>
+                    <span>wind:</span> 
+                    <span class="bold" rel="tooltip" title="windspeed">
+                    {{elem.windspeed_tomorrow|floatformat:"1"}}
+                    </span>
+                </div>
+                <div class="col-md-4">
+                    <div style="" rel="tooltip" title="temperature min/max" data-placement="bottom">
+                        {{elem.temp_min_tomorrow|floatformat:"1"}} - {{elem.temp_max_tomorrow|floatformat:"1"}}
+                    </div>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+
+</div>
+{% endif %}
