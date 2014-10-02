@@ -7,4 +7,5 @@ Devices are added as django apps to the howl project. Non user-triggered actions
 
 * Roomsensor: generic sensor with a REST interface
 * MongoDB: adapter for MongoDB collections
-* forecast: [forecast.io](www.forecast.io) app
+* forecast: [forecast.io](http://www.forecast.io) app
+* inkdisplay: show weather forecast and Roomsensor values on a jailbroken kindle

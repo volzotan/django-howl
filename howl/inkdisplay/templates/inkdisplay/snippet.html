@@ -1,0 +1,13 @@
+{% if models.inkdisplay.Inkdisplay %}
+<div class="wellname">inkdisplay</div>
+
+<div class="list-group">
+
+    {% for elem in models.inkdisplay.Inkdisplay %}
+        <div href="{% url 'inkdisplay_display' elem.name %}" class="list-group-item">
+            <span class="badge badge-default" rel="tooltip" title="last active">{{elem.last_active|date:"H:i"}}</span>
+            {{elem.name}}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}

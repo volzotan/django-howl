@@ -4,3 +4,4 @@ howl/howlcore/migrations
 howl/roomsensor/fixtures
 howl/mongodb/fixtures
 howl/forecast/fixtures
+howl/inkdisplay/fixtures
