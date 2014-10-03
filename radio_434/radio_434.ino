@@ -82,6 +82,7 @@ boolean sendCode(String code){
       sendByte(code[i]);
     }
   sendByte('x'); // send sync code
+  }
 }
  
 void sendByte(char i) {

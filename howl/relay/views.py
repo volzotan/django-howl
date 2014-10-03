@@ -25,16 +25,19 @@ def switch(request, relay_name, switch):
 
     # switch and check if error occured
     relay = Relay.objects.get(name = relay_name)
-    if (switch == "on"):
-        relay.switch_on()
-    else:
-        if (switch == "off"):
-            relay.switch_off()
-        else:
-            # bad request
-            pass
 
-    # context["messages"] =  [{"type":"danger","heading":"error","content":"switching relay failed"}]
+    try:
+        if (switch == "on"):
+            relay.switch_on()
+        else:
+            if (switch == "off"):
+                relay.switch_off()
+            else:
+                # bad request
+                pass
+    except Exception as e:
+        logger.error("switching failed", exc_info=True)
+        context.update(core.generate_msg(core.MessageType.ERROR, "error!", "switching relay failed"))
 
     return render(request, 'misc/message.html', context)
 
