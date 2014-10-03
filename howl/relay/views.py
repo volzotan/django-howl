@@ -24,7 +24,7 @@ def switch(request, relay_name, switch):
     context = {}
 
     # switch and check if error occured
-    relay = Light.objects.get(name = relay_name)
+    relay = Relay.objects.get(name = relay_name)
     if (switch == "on"):
         relay.switch_on()
     else:

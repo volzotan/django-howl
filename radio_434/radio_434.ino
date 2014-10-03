@@ -3,7 +3,7 @@
 
 byte mac[] = {0xDE, 0xED, 0xBA, 0xEE, 0xFE, 0xEA};
 
-EthernetServer server(80);
+EthernetServer server(8282);
 
 EthernetClient client;
 String ethernetBuffer;

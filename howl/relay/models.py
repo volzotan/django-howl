@@ -1,8 +1,10 @@
 from django.db import models
 from howlcore import core
 from django.utils.timezone import utc
+from howlcore.exceptions import CommunicationErrorException
 import datetime
-import mosquitto
+
+import socket
 
 import logging
 
@@ -14,33 +16,42 @@ SWITCH_ON  = "10"
 SWITCH_OFF = "01"
 
 class Radio(core.Device, core.Interface):
-    mqtt_topic = models.CharField(max_length=200)
+    ip_address = models.GenericIPAddressField()
+
+    PORT = 8282
+    TIMEOUT = 1  # seconds
+    DELIMITER = "\r\n"
+
+    CMD_PREFIX = "SEND "
 
     def write(self, data):
-        client = mosquitto.Mosquitto("howl_relay")
 
-        # self.client.on_connect = self.on_connect
+        sock = socket.socket()
+        sock.settimeout(self.TIMEOUT)
 
-        client.connect("192.168.178.55")
-        if (client.publish(self.mqtt_topic, data, retain=False) != 0):
-            logger.warn("publishing MQTT-msg from radio " + self.name + " failed")
-            raise Exception
+        try:
+            sock.connect((self.ip_address, self.PORT))
+        except Exception as e:
+            logger.warn("error connecting socket")
+            sock.close()
+            self.status = core.StatusType.NOT_RESPONDING
+            self.save()
+            raise CommunicationErrorException("error connecting socket")
 
-        client.disconnect()
+        raw_data = self.CMD_PREFIX + data + self.DELIMITER
+
+        sock.send(raw_data)
+        logger.debug("send: " + repr(raw_data))
 
         self.last_active = datetime.datetime.utcnow().replace(tzinfo=utc)
         self.save()
 
-    # def on_connect(self, mosq, obj, rc):
-    #     if rc == 0:
-    #         logger.debug("MQTT client connect successfull")
-
-    # def check(self):
-    #     # check
-    #     self.is_responding = True
-    #     self.save()
-    #     logger.debug("radio " + self.name + " check successfull")
-    #     return self.is_responding
+    def ping(self):
+        # self.is_responding = self.radio.check()
+        # self.save()
+        # logger.debug("relay " + self.name + " ping successfull")
+        # return self.is_responding
+        pass
 
 class Relay(core.Device, core.Actuator):
     devicecode = models.CharField(max_length=10)
@@ -54,9 +65,3 @@ class Relay(core.Device, core.Actuator):
 
     def send_to_radio(self, data):
         self.radio.write(data)
-
-    # def check(self):
-    #     self.is_responding = self.radio.check()
-    #     self.save()
-    #     logger.debug("relay " + self.name + " check successfull")
-    #     return self.is_responding
