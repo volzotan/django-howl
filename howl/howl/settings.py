@@ -56,7 +56,8 @@ INSTALLED_APPS = (
     'mongodb',
     'forecast',
     'inkdisplay',
-    'relay'
+    'relay',
+    'weekstat'
 )
 
 MIDDLEWARE_CLASSES = (

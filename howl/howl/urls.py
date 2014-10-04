@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     url(r'^mongodb/', include('mongodb.urls')),
     url(r'^forecast/', include('forecast.urls')),
     url(r'^inkdisplay/', include('inkdisplay.urls')),
-    url(r'^relay/', include('relay.urls'))
+    url(r'^relay/', include('relay.urls')),
+    url(r'^weekstat/', include('weekstat.urls'))
 )
 
 core.init()
