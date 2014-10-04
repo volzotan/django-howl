@@ -18,7 +18,7 @@ class Roomsensor(core.Device, core.Sensor):
     data = ["luminosity", "temperature", "humidity"]
 
     ip_address = models.GenericIPAddressField()
-    url = models.CharField(max_length=200) # '/sensorData'
+    url = models.CharField(max_length=200)  # '/sensorData'
     db = models.ForeignKey(Mongodb)
 
     luminosity = models.FloatField(blank=True, null=True)
@@ -35,11 +35,11 @@ class Roomsensor(core.Device, core.Sensor):
                 raise SensorReadError({response.status, response.reason})
             else:
                 body = response.read()
-                data = json.loads(body)
+                payload = json.loads(body)
                 
-                self.luminosity = int(data["luminosity"])
-                self.temperature = float(data["temperature"])
-                self.humidity = float(data["humidity"])
+                self.luminosity = int(payload["luminosity"])
+                self.temperature = float(payload["temperature"])
+                self.humidity = float(payload["humidity"])
 
                 self.last_active = datetime.datetime.utcnow().replace(tzinfo=utc)
                 self.status = core.StatusType.OK

@@ -44,6 +44,7 @@ class Radio(core.Device, core.Interface):
         logger.debug("send: " + repr(raw_data))
 
         self.last_active = datetime.datetime.utcnow().replace(tzinfo=utc)
+        self.status = core.StatusType.OK
         self.save()
 
     def ping(self):

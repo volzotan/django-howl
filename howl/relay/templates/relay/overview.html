@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{% load howlcore %}
+
 <div class="row">
     <div class="col-md-8">
         <div class="wellname">relays</div>
@@ -32,11 +34,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{elem.name}} <span style="float: right; color: #AAA;">{{elem.mqtt_topic}}</span></div>
                     <div class="panel-body">
-                        {% if elem.is_responding %}
-                            <span class="label label-success">is responding</span>
-                        {% else %}
-                            <span class="label label-danger">not responding</span>
-                        {% endif %}
+                        {% statustype elem.status %}
                         <span class="badge badge-default" rel="tooltip" title="last active" style="float: right;">{{elem.last_active|date:"H:i"}}</span>
                     </div>
                 </div>
