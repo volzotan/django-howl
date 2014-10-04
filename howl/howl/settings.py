@@ -55,7 +55,8 @@ INSTALLED_APPS = (
     'roomsensor',
     'mongodb',
     'forecast',
-    'inkdisplay'
+    'inkdisplay',
+    'relay'
 )
 
 MIDDLEWARE_CLASSES = (

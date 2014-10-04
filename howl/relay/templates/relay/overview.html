@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}relay{% endblock %}
+
+{% block content %}
+
+{% load howlcore %}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="wellname">relays</div>
+        {% if relay_list %}
+        <div class="list-group ajaxbtn">
+            {% for elem in relay_list %}
+                <li class="list-group-item">
+                    <div class="btn-group btn-group-xs" style="float: right;">
+                      <a href="{% url 'relay_switch' elem.name 'on' %}" type="button" class="btn btn-default">ON</a>
+                      <a href="{% url 'relay_switch' elem.name 'off' %}" type="button" class="btn btn-default">OFF</a>
+                    </div>
+                    {{elem.name}}
+                </li>
+            {% endfor %}
+        </div>
+        {% else %}
+            <div class="list-group">
+                <span class="list-group-item disabled"></span>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-4">
+        <div class="wellname">radios</div>
+        {% if radio_list %}
+            {% for elem in radio_list %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{elem.name}} <span style="float: right; color: #AAA;">{{elem.mqtt_topic}}</span></div>
+                    <div class="panel-body">
+                        {% statustype elem.status %}
+                        <span class="badge badge-default" rel="tooltip" title="last active" style="float: right;">{{elem.last_active|date:"H:i"}}</span>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+        <div class="list-group">
+            <span class="list-group-item disabled"></span>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
