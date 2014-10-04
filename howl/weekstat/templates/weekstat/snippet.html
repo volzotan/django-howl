@@ -37,8 +37,8 @@
 <div class="wellname">weekstat</div>
 <div class="list-group">
     {% for elem in models.weekstat.Weekstat %}
-        <li class="list-group-item">
-            <div class="row weekstat busy">
+        <li class="list-group-item" style="padding: 0px 15px 10px;">
+            <div class="row weekstat weekstat-{{elem.name}} busy">
                 <!--
                 <div class="col-md-2">      
                     <canvas id="{{elem.name}}-0" width="50" height="50">
@@ -84,14 +84,23 @@
                   </g>
                 </svg>
                 -->
-                <svg class="chart" width="450" height="130"></svg>
+                <svg class="chart chart-{{elem.name}}" width="450" height="130"></svg>
             </div>
 
                 <hr style="margin-bottom: 8px;" />
 
             <div class="row">
-                <div class="col-md-12"> 
-                <span style="color: #DDD;">foo bar blubb</span>
+                <div class="col-md-4">
+                    <span style="color: #DDD;">avg. temp: </span>
+                    <span style="color: #999;">0.0</span>
+                </div>
+                <div class="col-md-4">
+                    <span style="color: #DDD;">avg. humidity: </span>
+                    <span style="color: #999;">0.0</span>
+                </div>
+                <div class="col-md-4">
+                    <span style="color: #DDD;">avg. lum: </span>
+                    <span style="color: #999;">000</span>
                 </div>
             </div>
         </li>
@@ -104,23 +113,24 @@
 
 <script type="text/javascript">
 
-var statname = "default";
-
 var tformat = d3.time.format("%a");
 
 //var data = [20, 30, 20, 10, 35, 30];
-var data; 
+var data;
 
-d3.json("/weekstat/" + statname + "/rawdata/", function(error, json) {
-  if (error) {
-    $(".weekstat").removeClass("busy");
-    $(".weekstat").addClass("failed");
-      console.log(error);
-  }
-  data = json;
-  draw_graph("chart");
-  $(".weekstat").removeClass("busy");
-});
+{% for elem in models.weekstat.Weekstat %}
+
+    d3.json("/weekstat/" + "{{elem.name}}" + "/rawdata/", function(error, json) {
+      if (error) {
+        $(".weekstat-"+"{{elem.name}}").removeClass("busy");
+        $(".weekstat-"+"{{elem.name}}").addClass("failed");
+          console.log(error);
+      }
+      data = json;
+      draw_graph("chart-"+"{{elem.name}}");
+      $(".weekstat-"+"{{elem.name}}").removeClass("busy");
+    });
+{% endfor %}
 
 function draw_graph(container_name) {
     var width = 450,
@@ -148,7 +158,7 @@ function draw_graph(container_name) {
     circ.append("text")
         .attr("x", 50)
         .attr("y", 56)
-        .text(function(d) { return d3.round(d,2) * 100 }); // + "%"; });
+        .text(function(d) { return d3.round(d * 100,0) }); // + "%"; });
 
     circ.append("text")
         .attr("x", 50)

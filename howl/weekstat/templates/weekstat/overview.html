@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}WeekStat{% endblock %}
+
+{% block content %}
+
+<div class="wellname">Locations</div>
+<div class="list-group">
+    {% if object_list %}
+        {% for elem in object_list %}
+            <a href="{% url 'weekstat_display' elem.name %}" class="list-group-item">
+                {{elem.name}}
+            </a>
+        {% endfor %}
+    {% else %}
+        <div class="list-group">
+            <span class="list-group-item disabled"></span>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -14,7 +14,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-MIN_LUMINOSITY = 150000
+MIN_LUMINOSITY = 100000
 MAX_LUMINOSITY = 420000
 LUMINOSITY_THRESHOLD = 100
 
@@ -52,7 +52,7 @@ class Weekstat(core.Device, core.Interface):
 
         response_data.reverse()
         self.data = json.dumps(response_data) # WEIRD BUG
-        self.last_active = datetime.datetime.utcnow().replace(tzinfo=utc)
+        self.last_active = datetime.utcnow().replace(tzinfo=utc)
         self.save()
 
     def ping(self):
