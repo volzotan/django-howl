@@ -24,8 +24,8 @@ plot "/tmp/plotdata.csv" using 1:2 with lines title "luminosity" lt rgb "black"
 set ytics 18,4
 set yrange [16:28]
 plot "/tmp/plotdata.csv" using 1:3 with lines title "temperature" lt rgb "black" 
-set ytics 20,10
-set yrange [15:45]
+set ytics 30,10
+set yrange [25:65]
 plot "/tmp/plotdata.csv" using 1:4 with lines title "humidity" lt rgb "black" 
 
 unset multiplot

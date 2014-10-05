@@ -1,0 +1,176 @@
+{% if models.weekstat.Weekstat %}
+
+{% load staticfiles %}
+
+<style>
+
+.chart circle {
+  fill: #F0AD4E;
+  stroke: #F0AD4E;
+  stroke-width: 2px;
+}
+
+.chart text {
+  font: 15px sans-serif;
+  fill: #F0AD4E;
+  text-anchor: middle;
+}
+
+.chart g:hover text {
+  fill: #FFF;
+}
+
+.chart g:hover .day {
+  fill: #000;
+}
+
+.chart .day {
+  fill: #888;
+}
+
+.chart g:hover circle {
+  /* fill: #FAFAFA; */
+}
+
+</style>
+
+<div class="wellname">weekstat</div>
+<div class="list-group">
+    {% for elem in models.weekstat.Weekstat %}
+        <li class="list-group-item" style="padding: 0px 15px 10px;">
+            <div class="row weekstat weekstat-{{elem.name}} busy">
+                <!--
+                <div class="col-md-2">      
+                    <canvas id="{{elem.name}}-0" width="50" height="50">
+                </div>
+                <div class="col-md-2">
+                    <canvas id="{{elem.name}}-1" width="50" height="50">
+                </div>
+                <div class="col-md-2">
+                    <canvas id="{{elem.name}}-2" width="50" height="50">
+                </div>
+                <div class="col-md-2">
+                    <canvas id="{{elem.name}}-3" width="50" height="50">
+                </div>
+                <div class="col-md-2">
+                    <canvas id="{{elem.name}}-4" width="50" height="50">
+                </div>
+                <div class="col-md-2">
+                    <canvas id="{{elem.name}}-5" width="50" height="50">
+                </div>
+                -->
+
+                <!--
+                <svg class="chart" width="450" height="130">
+                  <g transform="translate(0,0)">
+                    <circle cx="50" cy="50" r="20" />
+                    <text x="50" y="120" dy=".35em">135</text>
+                  </g>
+                  <g transform="translate(70,0)">
+                    <circle cx="50" cy="50" r="30" />
+                    <text x="50" y="120" dy=".35em">87</text>
+                  </g>
+                  <g transform="translate(140,0)">
+                    <circle cx="50" cy="50" r="20" />
+                  </g>
+                  <g transform="translate(210,0)">
+                    <circle cx="50" cy="50" r="10" />
+                  </g>
+                  <g transform="translate(280,0)">
+                    <circle cx="50" cy="50" r="35" />
+                  </g>
+                  <g transform="translate(350,0)">
+                    <circle cx="50" cy="50" r="30" />
+                  </g>
+                </svg>
+                -->
+                <svg class="chart chart-{{elem.name}}" width="450" height="130"></svg>
+            </div>
+
+                <hr style="margin-bottom: 8px;" />
+
+            <div class="row">
+                <div class="col-md-4">
+                    <span style="color: #DDD;">avg. temp: </span>
+                    <span style="color: #999;">0.0</span>
+                </div>
+                <div class="col-md-4">
+                    <span style="color: #DDD;">avg. humidity: </span>
+                    <span style="color: #999;">0.0</span>
+                </div>
+                <div class="col-md-4">
+                    <span style="color: #DDD;">avg. lum: </span>
+                    <span style="color: #999;">000</span>
+                </div>
+            </div>
+        </li>
+    {% endfor %}
+
+</div>
+
+<script src="{% static "weekstat/js/weekstat.js" %}" type="text/javascript"></script>
+<script src="{% static "js/d3.min.js" %}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+var tformat = d3.time.format("%a");
+
+//var data = [20, 30, 20, 10, 35, 30];
+var data;
+
+{% for elem in models.weekstat.Weekstat %}
+
+    d3.json("/weekstat/" + "{{elem.name}}" + "/rawdata/", function(error, json) {
+      if (error) {
+        $(".weekstat-"+"{{elem.name}}").removeClass("busy");
+        $(".weekstat-"+"{{elem.name}}").addClass("failed");
+          console.log(error);
+      }
+      data = json;
+      draw_graph("chart-"+"{{elem.name}}");
+      $(".weekstat-"+"{{elem.name}}").removeClass("busy");
+    });
+{% endfor %}
+
+function draw_graph(container_name) {
+    var width = 450,
+        height = 130,
+        circleSize = 30;
+
+    var x = d3.scale.linear()
+        .domain([0, circleSize])
+        .range([0, width]);
+
+    var chart = d3.select("." + container_name)
+        .attr("width", width)
+        .attr("height", height);
+
+    var circ = chart.selectAll("g")
+        .data(data)
+      .enter().append("g")
+        .attr("transform", function(d, i) { return "translate(" + i * 70 + ", 0)"; });
+
+    circ.append("circle")
+        .attr("cx", 50)
+        .attr("cy", 50)
+        .attr("r", function(d) { return d * circleSize; });
+
+    circ.append("text")
+        .attr("x", 50)
+        .attr("y", 56)
+        .text(function(d) { return d3.round(d * 100,0) }); // + "%"; });
+
+    circ.append("text")
+        .attr("x", 50)
+        .attr("y", 110)
+        .attr("class", "day")
+        .text(function(d, i) { 
+            var d = new Date();
+            d.setDate(d.getDate() - (data.length - i));
+            return tformat(d);
+        });
+}
+
+</script>
+
+{% endif %}
