@@ -5,12 +5,16 @@ from django.core.exceptions import ValidationError
 
 from .models import Group
 
+from django.db.models import get_apps
+from django.apps import apps
+
 import os
 import json
 import logging
 
 logger = logging.getLogger(__name__)
 
+APP_NAME_EXCLUSION_LIST = ["howlcore", "djcelery"]
 
 def init():
 
@@ -23,6 +27,18 @@ def init():
     config = json.load(open(file_path, 'r'))
     logging.config.dictConfig(config)
 
+    logger.info("logging initialized")
+
+def get_apps():
+    applist = []
+
+    for app_config in apps.get_app_configs():
+        if not "django." in app_config.name: # filter out djangos own apps
+            if app_config.name not in APP_NAME_EXCLUSION_LIST:
+                applist.append(app_config)
+
+    return applist
+
 
 def generate_msg(error_type, heading, message):
     dictionary = {}
@@ -33,6 +49,17 @@ def generate_msg(error_type, heading, message):
 def validate_whitespace(value):
     if value.find(" ") > 0:
         raise ValidationError("name contains whitespace")
+
+def ping_all_devices():
+    devicelist = []
+
+    for app_config in get_apps():
+        for model in app_config.get_models():
+            if issubclass(model, Device):
+                devicelist.extend(model.objects.all())
+
+    for elem in devicelist:
+        elem.ping()
 
 """
 

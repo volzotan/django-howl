@@ -8,8 +8,6 @@ register = template.Library()
 @register.simple_tag
 def statustype(format_string):
 
-    print format_string
-
     BADGE = {core.StatusType.UNDEFINED      : "default",
              core.StatusType.OK             : "success",
              core.StatusType.NOT_RESPONDING : "danger",

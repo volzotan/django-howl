@@ -3,16 +3,17 @@ from django.apps import apps
 from django.utils.timezone import utc
 from django.utils.timezone import localtime
 
+from howlcore import core
+
 def device(request):
 
     context = dict()
 
     context["apps"] = []
 
-    for app_config in apps.get_app_configs():
-        if not "django." in app_config.name: # filter out djangos own apps
-            if not app_config.name == "howlcore":
-                context["apps"].append(app_config)
+    for app in core.get_apps():
+        if not app.name == "howlcore":
+            context["apps"].append(app)
 
     # app
     #   name : roomsensor

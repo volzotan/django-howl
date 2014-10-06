@@ -28,7 +28,7 @@ def inject_models_in_context():
     for app_config in apps.get_app_configs():
         if not "django." in app_config.name:  # filter out djangos own apps
 
-            lh = {} # list helper
+            lh = {}  # list helper
             lh["obj"] = app_config
             lh["children"] = []
 
@@ -52,13 +52,10 @@ def index(request):
 
     context["models"] = {}
 
-    for app_config in apps.get_app_configs():
-        if not "django." in app_config.name:  # filter out djangos own apps
-            context["models"][app_config.name] = {}
-            for model in app_config.get_models():
-
-                context["models"][app_config.name][model.__name__] = model.objects.all()
-
+    for app_config in core.get_apps():
+        context["models"][app_config.name] = {}
+        for model in app_config.get_models():
+            context["models"][app_config.name][model.__name__] = model.objects.all()
 
     return render(request, "howlcore/overview.html", context)
 

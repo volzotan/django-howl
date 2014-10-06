@@ -54,9 +54,3 @@ class Weekstat(core.Device, core.Interface):
         self.data = json.dumps(response_data) # WEIRD BUG
         self.last_active = datetime.utcnow().replace(tzinfo=utc)
         self.save()
-
-    def ping(self):
-        self.status = core.StatusType.OK
-        self.save()
-        logger.debug("weekstat " + self.name + " check successful")
-        return True
