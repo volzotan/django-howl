@@ -50,8 +50,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'djcelery',
-
     'howlcore',
+    'rule',
+
     'roomsensor',
     'mongodb',
     'forecast',
