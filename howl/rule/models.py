@@ -67,7 +67,7 @@ class Rule(models.Model):
                 result = getattr(self.destination_device, self.destination_method)()
         except AttributeError as e:
             logger.error("trigger: method [{0}] does not exist in {1}".format(self.destination_method, str(self.destination_device)))
-            raise e
+            raise
 
         return result
 

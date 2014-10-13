@@ -40,6 +40,18 @@ def get_apps():
     return applist
 
 
+def get_devices():
+
+    devicelist = []
+
+    for app_config in get_apps():
+        for model in app_config.get_models():
+            if issubclass(model, Device):
+                devicelist.append(model)
+
+    return devicelist
+
+
 def generate_msg(error_type, heading, message):
     dictionary = {}
     dictionary["messages"] = [{"type": error_type, "heading": heading, "content": message}]
@@ -53,10 +65,8 @@ def validate_whitespace(value):
 def ping_all_devices():
     devicelist = []
 
-    for app_config in get_apps():
-        for model in app_config.get_models():
-            if issubclass(model, Device):
-                devicelist.extend(model.objects.all())
+    for model in get_devices():
+        devicelist.extend(model.objects.all())
 
     for elem in devicelist:
         elem.ping()
