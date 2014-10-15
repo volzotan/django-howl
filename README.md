@@ -1,4 +1,4 @@
-![howl owl](https://raw.githubusercontent.com/volzotan/django-howl/develop/owl_32x32.png) howl
+# ![howl owl](https://raw.githubusercontent.com/volzotan/django-howl/develop/owl_32x32.png) howl
 
 howl is a modular home automation application, aimed at providing a common platform for low cost sensors, actuators and interfaces.
 Devices are added as django apps to the howl project. Non user-triggered actions can be fired via Celerys Periodic Tasks.
