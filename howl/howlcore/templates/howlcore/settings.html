@@ -7,19 +7,22 @@
 {% load math %}
 {% load howlcore %}
 
+<!--
  <div class="btn-group">
-    <a href="{% url 'howlcore' %}" type="button" class="btn btn-default">trigger check for responding devices</a>
-    <a href="{% url 'howlcore' %}" type="button" class="btn btn-default">foo</a>
+    <a href="{% url 'howlcore' %}" type="button" class="btn btn-default">1</a>
+    <a href="{% url 'howlcore' %}" type="button" class="btn btn-default">2</a>
 </div>
 
 <br/><br/>
+
+-->
 
 <div class="row">
     <div class="col-md-6">
         <div class="wellname">Installed Apps</div>
 
             {% for app in modellist %}
-            {% if forloop.counter0 < modellist|length|div:"2" %}
+            {% if forloop.counter0 <= modellist|length|div:"2" %}
             <div class="panel panel-default">
                 <div class="panel-heading">{{ app.obj.verbose_name }}</div>
                 <div class="panel-body">
@@ -52,7 +55,7 @@
         <div class="wellname">&nbsp</div>
 
             {% for app in modellist %}
-            {% if forloop.counter0 >= modellist|length|div:"2" %}
+            {% if forloop.counter0 > modellist|length|div:"2" %}
             <div class="panel panel-default">
                 <div class="panel-heading">{{ app.obj.verbose_name }}</div>
                 <div class="panel-body">

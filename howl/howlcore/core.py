@@ -34,7 +34,7 @@ def get_apps():
 
     for app_config in apps.get_app_configs():
         if not "django." in app_config.name: # filter out djangos own apps
-            if app_config.name not in APP_NAME_EXCLUSION_LIST:
+            if (app_config.name).lower() not in APP_NAME_EXCLUSION_LIST:
                 applist.append(app_config)
 
     return applist

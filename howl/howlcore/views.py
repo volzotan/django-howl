@@ -25,7 +25,7 @@ def inject_models_in_context():
 
     """
 
-    for app_config in apps.get_app_configs():
+    for app_config in core.get_apps():
         if not "django." in app_config.name:  # filter out djangos own apps
 
             lh = {}  # list helper
@@ -48,7 +48,7 @@ def inject_models_in_context():
 
 
 def index(request):
-    context = {}  # inject_models_in_context()
+    context = {}
 
     context["models"] = {}
 
