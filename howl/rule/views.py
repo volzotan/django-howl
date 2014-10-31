@@ -32,12 +32,28 @@ class NewRuleForm(forms.Form):
     name = forms.CharField()
     origin_name = RuleChoiceField()
     origin_attribute = RuleChoiceField()
-    option = RuleChoiceField()
-    origin_value = forms.CharField()
+    option = forms.ChoiceField(choices=Rule.OPTION)
+    origin_value = forms.CharField(required=False)
 
     destination_name = RuleChoiceField()
     destination_method = RuleChoiceField()
-    destination_value = forms.CharField()
+    destination_value = forms.CharField(required=False)
+
+    def clean_name(self):
+        if len(Rule.objects.filter(name=self.cleaned_data["name"])) != 0:
+            return False
+        return True
+
+    def clean(self):
+        # check if origin_name exists, and if in device-list
+
+        # and has the given origin_attribute
+
+        # check if destination_name exists and in device-list
+
+        # and has the given destination_attribute
+
+        pass
 
 
 def index(request):
@@ -80,6 +96,10 @@ def add(request):
 
         if form.is_valid():
             print form.cleaned_data["name"]
+            print form.cleaned_data["origin_name"]
+            print form.cleaned_data["origin_attribute"]
+            print form.cleaned_data["option"]
+            print form.cleaned_data["origin_value"]
 
             return HttpResponseRedirect('/rule/')
         else:

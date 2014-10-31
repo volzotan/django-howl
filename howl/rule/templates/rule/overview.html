@@ -105,25 +105,27 @@
             </div>
             <div class="col-lg-9">
                 <span class="input-group-btn">
-                    <select id="id_origin_name" name="origin_name" onchange="sourceVal()" class="form-control {% if form.name.errors %}form-error{% endif %}">
+                    <select id="id_origin_name" name="origin_name" onchange="sourceVal()" class="form-control {% if form.origin_name.errors %}form-error{% endif %}">
                         {% for elem in devicelist %}
                             <optgroup label="{{ elem.name }}">
                             {% for inst in elem.children %}
-                                <option value="{{ elem.name }}">{{ inst }}</option>
+                                <option value="{{ inst.name }}">{{ inst }}</option>
                             {% endfor %}
+                            </optgroup>
                         {% endfor %}
                     </select>
-                    <select id="id_origin_attribute" name="origin_attribute" class="form-control {% if form.name.errors %}form-error{% endif %}" style="width: 130px;">
+                    <select id="id_origin_attribute" name="origin_attribute" class="form-control {% if form.origin_attribute.errors %}form-error{% endif %}" style="width: 130px;">
                         <option value="" disabled selected>attribute</option>
                     </select>
-                    <select id="id_option" name="option" class="form-control {% if form.name.errors %}form-error{% endif %}">
-                        <option>E</option>
-                        <option>&gt;</option>
-                        <option>&gt;=</option>
-                        <option>&lt;</option>
-                        <option>&lt;=</option>
+                    <select id="id_option" name="option" class="form-control {% if form.option.errors %}form-error{% endif %}">
+                        <option value="0">E</option>
+                        <option value="1">==</option>
+                        <option value="2">&gt;</option>
+                        <option value="3">&gt;=</option>
+                        <option value="4">&lt;</option>
+                        <option value="5">&lt;=</option>
                     </select>
-                    <input id="id_origin_value" name="origin_value" type="text" class="form-control {% if form.name.errors %}form-error{% endif %}" placeholder="value">
+                    <input id="id_origin_value" name="origin_value" type="text" class="form-control {% if form.origin_value.errors %}form-error{% endif %}" placeholder="value">
                 </span>
             </div>
         </div>
@@ -142,24 +144,26 @@
             </div>
             <div class="col-lg-9">
                     <span class="input-group-btn">
-                        <select id="id_destination_name" name="destination_name" onchange="destVal()" class="form-control {% if form.name.errors %}form-error{% endif %}">
+                        <select id="id_destination_name" name="destination_name" onchange="destVal()" class="form-control {% if form.destination_name.errors %}form-error{% endif %}">
                             {% for elem in devicelist %}
                                 <optgroup label="{{ elem.name }}">
                                 {% for inst in elem.children %}
-                                    <option value="{{ elem.name }}">{{ inst }}</option>
+                                    <option value="{{ inst.name }}">{{ inst }}</option>
                                 {% endfor %}
+                                </optgroup>
                             {% endfor %}
                         </select>
-                        <select id="id_destination_method" name="destination_method" class="form-control {% if form.name.errors %}form-error{% endif %}" style="width: 130px;">
+                        <select id="id_destination_method" name="destination_method" class="form-control {% if form.destination_method.errors %}form-error{% endif %}" style="width: 130px;">
                             <option value="" disabled selected>attribute</option>
                         </select>
 
-                        <input id="id_destination_value" name="destination_value" type="text" class="form-control {% if form.name.errors %}form-error{% endif %}" placeholder="value">
+                        <input id="id_destination_value" name="destination_value" type="text" class="form-control {% if form.destination_value.errors %}form-error{% endif %}" placeholder="value">
                     </span>
 
             </div>
         </div>
 
+        {{ form.errors }}
         {{ form.non_field_errors }}
     </form>
 
@@ -187,10 +191,13 @@
         }
 
         function add(objSel, attrSel) {
-            for (var i=0; i<attributes[objSel.value].length; i++) {
-                if (attributes[objSel.value].length > 0) {
+
+            var cls = objSel.options[objSel.selectedIndex].parentNode.label;
+
+            for (var i=0; i<attributes[cls].length; i++) {
+                if (attributes[cls].length > 0) {
                     var option = document.createElement("option");
-                    option.text = attributes[objSel.value][i];
+                    option.text = attributes[cls][i];
                     attrSel.add(option);
                 }
             }
@@ -199,8 +206,7 @@
         function remove(attrSel) {
             var len = attrSel.length;
             for (var i=0; i<len; i++) {
-                console.log(i);
-                attrSel.remove(i)
+                attrSel.remove(0)
             }
         }
 
