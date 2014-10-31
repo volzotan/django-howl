@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}rules{% endblock %}
+
+{% block content %}
+
+    <!--
+
+        <table class="table table-bordered">
+            {% for elem in rule_list %}
+                <tr>
+                    <td>{{ elem.name }}</td>
+                    <td>{{ elem.origin_device.name }}</td>
+                    <td>{{ elem.origin_attribute }}</td>
+
+                    <td>
+                        <select class="form-control">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option selected>4</option>
+                            <option>7</option>
+                        </select>
+                    </td>
+                    <td><input class="form-control" type="text" default="{{ elem.origin_value }}"></td>
+
+                    <td>{{ elem.destination_device.name }}</td>
+                    <td>{{ elem.destination_method }}</td>
+                    <td><input class="form-control" type="text" default="{{ elem.destination_value }}"></td>
+                </tr>       
+            {% endfor %}
+        </table>
+    -->
+
+    {% for elem in rule_list %}
+
+        <div class="wellname">{{ elem.name }}</div>
+
+        <div class="row">
+            <div class="col-lg-5">
+
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default">{{ elem.origin_device.name }}</button>
+                        <button type="button" class="btn btn-default">{{ elem.origin_attribute }}</button>
+                        <button type="button" class="btn btn-default">{{ elem.get_option_display }}</button>
+                    </span>
+                    <input type="text" class="form-control" value="{{ elem.origin_value }}">
+                </div>
+
+            </div>
+            <div class="col-lg-5">
+
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default">{{ elem.destination_device.name }}</button>
+                        <button type="button" class="btn btn-default">{{ elem.destination_method }}</button>
+                    </span>
+                    <input type="text" class="form-control" value="{{ elem.destination_value }}">
+                </div>
+
+            </div>
+            <div class="col-lg-2">
+
+                <div class="btn-group ajaxbtn">
+
+                    <a href="{% url 'rule_test' elem.name %}" type="button" class="btn btn-default">test</a>
+                    <a href="{% url 'rule_trigger' elem.name %}" type="button" class="btn btn-default">trigger</a>
+
+                    <!--
+                    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">test</a></li>
+                </ul>
+                -->
+                </div>
+
+            </div>
+
+        </div>
+        <br/>
+    {% endfor %}
+
+    {% if rule_list %}
+        <br/>
+        <hr/>
+    {% endif %}
+
+    <br/>
+
+    <div class="wellname">new rule</div>
+
+    <form role="form" action="/rule/new/" method="post" class="form-inline">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-lg-3">
+                <input id="id_name" name="name" type="text" class="form-control {% if form.name.errors %}form-error{% endif %}" placeholder="new rule">
+            </div>
+            <div class="col-lg-9">
+                <span class="input-group-btn">
+                    <select id="id_origin_name" name="origin_name" onchange="sourceVal()" class="form-control {% if form.name.errors %}form-error{% endif %}">
+                        {% for elem in devicelist %}
+                            <optgroup label="{{ elem.name }}">
+                            {% for inst in elem.children %}
+                                <option value="{{ elem.name }}">{{ inst }}</option>
+                            {% endfor %}
+                        {% endfor %}
+                    </select>
+                    <select id="id_origin_attribute" name="origin_attribute" class="form-control {% if form.name.errors %}form-error{% endif %}" style="width: 130px;">
+                        <option value="" disabled selected>attribute</option>
+                    </select>
+                    <select id="id_option" name="option" class="form-control {% if form.name.errors %}form-error{% endif %}">
+                        <option>E</option>
+                        <option>&gt;</option>
+                        <option>&gt;=</option>
+                        <option>&lt;</option>
+                        <option>&lt;=</option>
+                    </select>
+                    <input id="id_origin_value" name="origin_value" type="text" class="form-control {% if form.name.errors %}form-error{% endif %}" placeholder="value">
+                </span>
+            </div>
+        </div>
+        <div style="height: 5px;"></div>
+
+        <div class="row">
+
+            <div class="col-lg-3">
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> add rule
+                    </button>
+
+                </div>
+
+            </div>
+            <div class="col-lg-9">
+                    <span class="input-group-btn">
+                        <select id="id_destination_name" name="destination_name" onchange="destVal()" class="form-control {% if form.name.errors %}form-error{% endif %}">
+                            {% for elem in devicelist %}
+                                <optgroup label="{{ elem.name }}">
+                                {% for inst in elem.children %}
+                                    <option value="{{ elem.name }}">{{ inst }}</option>
+                                {% endfor %}
+                            {% endfor %}
+                        </select>
+                        <select id="id_destination_method" name="destination_method" class="form-control {% if form.name.errors %}form-error{% endif %}" style="width: 130px;">
+                            <option value="" disabled selected>attribute</option>
+                        </select>
+
+                        <input id="id_destination_value" name="destination_value" type="text" class="form-control {% if form.name.errors %}form-error{% endif %}" placeholder="value">
+                    </span>
+
+            </div>
+        </div>
+
+        {{ form.non_field_errors }}
+    </form>
+
+
+    <script type="text/javascript">
+
+        {% autoescape off %}
+            var attributes = {{ attributelist }};
+        {% endautoescape %}
+
+        function sourceVal() {
+            var objSel = document.getElementById("id_origin_name"),
+                attrSel = document.getElementById("id_origin_attribute");
+
+            remove(attrSel);
+            add(objSel, attrSel);
+        }
+
+        function destVal() {
+            var objSel = document.getElementById("id_destination_name"),
+                attrSel = document.getElementById("id_destination_method");
+
+            remove(attrSel);
+            add(objSel, attrSel);
+        }
+
+        function add(objSel, attrSel) {
+            for (var i=0; i<attributes[objSel.value].length; i++) {
+                if (attributes[objSel.value].length > 0) {
+                    var option = document.createElement("option");
+                    option.text = attributes[objSel.value][i];
+                    attrSel.add(option);
+                }
+            }
+        }
+
+        function remove(attrSel) {
+            var len = attrSel.length;
+            for (var i=0; i<len; i++) {
+                console.log(i);
+                attrSel.remove(i)
+            }
+        }
+
+    </script>
+
+{% endblock %}
