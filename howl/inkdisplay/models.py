@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 DEVICE_TYPE = core.DeviceType.INTERFACE
 
 class Inkdisplay(core.Device, core.Interface):
+
+    attributes = ["write"]
+
     forecast = models.ForeignKey(Forecast)
     db = models.ForeignKey(Mongodb)
 

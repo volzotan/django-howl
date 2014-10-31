@@ -14,11 +14,13 @@ DEVICE_TYPE = core.DeviceType.SENSOR
 
 logger = logging.getLogger(__name__)
 
+
 class Roomsensor(core.Device, core.Sensor):
+    attributes = ["read"]
     data = ["luminosity", "temperature", "humidity"]
 
     ip_address = models.GenericIPAddressField()
-    url = models.CharField(max_length=200)  # '/sensorData'
+    url = models.CharField(max_length=200)
     db = models.ForeignKey(Mongodb)
 
     luminosity = models.FloatField(blank=True, null=True)

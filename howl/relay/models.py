@@ -16,6 +16,9 @@ SWITCH_ON  = "10"
 SWITCH_OFF = "01"
 
 class Radio(core.Device, core.Interface):
+
+    attributes = ["write"]
+
     ip_address = models.GenericIPAddressField()
 
     PORT = 8282
@@ -55,6 +58,9 @@ class Radio(core.Device, core.Interface):
         pass
 
 class Relay(core.Device, core.Actuator):
+
+    attributes = ["switch_on", "switch_off"]
+
     devicecode = models.CharField(max_length=10)
     radio = models.ForeignKey(Radio)
 

@@ -12,6 +12,9 @@ logger = logging.getLogger(__name__)
 DEVICE_TYPE = core.DeviceType.INTERFACE
 
 class Mongodb(core.Device, core.Interface):
+
+    attributes = ["read", "write"]
+
     username = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
     url = models.CharField(max_length=200)

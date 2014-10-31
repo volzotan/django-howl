@@ -62,6 +62,7 @@ def validate_whitespace(value):
     if value.find(" ") > 0:
         raise ValidationError("name contains whitespace")
 
+
 def ping_all_devices():
     devicelist = []
 
@@ -71,11 +72,13 @@ def ping_all_devices():
     for elem in devicelist:
         elem.ping()
 
+
 """
 
 Classes
 
 """
+
 
 class StatusType:
     UNDEFINED       = 0
@@ -101,6 +104,8 @@ class Device(models.Model):
     name = models.CharField(max_length=200, validators=[validate_whitespace])
     last_active = models.DateTimeField(blank=True, null=True)
     group = models.ForeignKey(Group, blank=True, null=True)
+
+    attributes = []
 
     STATUS_TYPE = (
         (StatusType.UNDEFINED, 'undefined'),

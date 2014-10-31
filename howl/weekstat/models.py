@@ -22,6 +22,9 @@ DEVICE_TYPE = core.DeviceType.INTERFACE
 
 
 class Weekstat(core.Device, core.Interface):
+
+    attributes = ["read"]
+
     db = models.ForeignKey(Mongodb)
     data = models.TextField(blank=True, null=True)
 

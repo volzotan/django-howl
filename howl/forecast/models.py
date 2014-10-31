@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 class Forecast(core.Device, core.Sensor):
 
+    attributes = ["read"]
+
     location = models.CharField(max_length=100)
     api_key  = models.CharField(max_length=100)
 
