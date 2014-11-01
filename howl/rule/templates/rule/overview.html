@@ -109,7 +109,7 @@
                         {% for elem in devicelist %}
                             <optgroup label="{{ elem.name }}">
                             {% for inst in elem.children %}
-                                <option value="{{ inst.name }}">{{ inst }}</option>
+                                <option value="{{ elem.name }}.{{ inst.name }}">{{ inst }}</option>
                             {% endfor %}
                             </optgroup>
                         {% endfor %}
@@ -148,7 +148,7 @@
                             {% for elem in devicelist %}
                                 <optgroup label="{{ elem.name }}">
                                 {% for inst in elem.children %}
-                                    <option value="{{ inst.name }}">{{ inst }}</option>
+                                    <option value="{{ elem.name }}.{{ inst.name }}">{{ inst }}</option>
                                 {% endfor %}
                                 </optgroup>
                             {% endfor %}

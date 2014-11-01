@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django import forms
+from django.core.exceptions import ValidationError
 
 from models import Rule
 from howlcore import core
@@ -44,16 +45,72 @@ class NewRuleForm(forms.Form):
             return False
         return True
 
+    def _check_for_existence(self, device_class_name, instance_name):
+
+        origin_instance = None
+
+        device_list = core.get_devices()
+        success = False
+        for elem in device_list:
+            if device_class_name.lower() == elem.__name__.lower():
+                for inst in elem.objects.all():
+                    if instance_name == inst.name:
+                        success = True
+                        origin_instance = inst
+                        break
+
+                if not success:
+                    raise ValidationError(
+                        'Invalid value: %(value)s',
+                        code='invalid',
+                        params={'value': instance_name},
+                    )
+
+        if not success:
+            raise ValidationError(
+                'Invalid value: %(value)s',
+                code='invalid',
+                params={'value': device_class_name},
+            )
+
+        return origin_instance
+
     def clean(self):
         # check if origin_name exists, and if in device-list
 
+        data_origin_name = self.cleaned_data["origin_name"]
+        device_class_name = data_origin_name[0:data_origin_name.find('.')]
+        instance_name = data_origin_name[data_origin_name.find('.')+1:]
+
+        origin_instance = self._check_for_existence(device_class_name, instance_name)
+        
         # and has the given origin_attribute
+
+        if not hasattr(origin_instance, self.cleaned_data["origin_attribute"]):
+            raise ValidationError(
+                'Invalid value: %(value)s',
+                code='invalid',
+                params={'value': self.cleaned_data["origin_attribute"]},
+            )
 
         # check if destination_name exists and in device-list
 
-        # and has the given destination_attribute
+        data_destination_name = self.cleaned_data["destination_name"]
+        device_class_name = data_destination_name[0:data_destination_name.find('.')]
+        instance_name = data_destination_name[data_destination_name.find('.')+1:]
 
-        pass
+        destination_instance = self._check_for_existence(device_class_name, instance_name)
+
+        # and has the given destination_method
+
+        # TODO: check if callable
+
+        if not hasattr(destination_instance, self.cleaned_data["destination_method"]):
+            raise ValidationError(
+                'Invalid value: %(value)s',
+                code='invalid',
+                params={'value': self.cleaned_data["destination_method"]},
+            )
 
 
 def index(request):
@@ -95,11 +152,11 @@ def add(request):
         form = NewRuleForm(request.POST)
 
         if form.is_valid():
-            print form.cleaned_data["name"]
-            print form.cleaned_data["origin_name"]
-            print form.cleaned_data["origin_attribute"]
-            print form.cleaned_data["option"]
-            print form.cleaned_data["origin_value"]
+            # print form.cleaned_data["name"]
+            # print form.cleaned_data["origin_name"]
+            # print form.cleaned_data["origin_attribute"]
+            # print form.cleaned_data["option"]
+            # print form.cleaned_data["origin_value"]
 
             return HttpResponseRedirect('/rule/')
         else:
