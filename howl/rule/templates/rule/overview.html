@@ -45,7 +45,11 @@
                         <button type="button" class="btn btn-default">{{ elem.origin_attribute }}</button>
                         <button type="button" class="btn btn-default">{{ elem.get_option_display }}</button>
                     </span>
-                    <input type="text" class="form-control" value="{{ elem.origin_value }}">
+                    {% if elem.origin_value == None %}
+                        <input type="text" class="form-control" value="" disabled>
+                    {% else %}
+                        <input type="text" class="form-control" value="" disabled>
+                    {% endif %}
                 </div>
 
             </div>
@@ -56,7 +60,11 @@
                         <button type="button" class="btn btn-default">{{ elem.destination_device.name }}</button>
                         <button type="button" class="btn btn-default">{{ elem.destination_method }}</button>
                     </span>
-                    <input type="text" class="form-control" value="{{ elem.destination_value }}">
+                    {% if elem.destination_value == None %}
+                        <input type="text" class="form-control" value="" disabled>
+                    {% else %}
+                        <input type="text" class="form-control" value="" disabled>
+                    {% endif %}
                 </div>
 
             </div>

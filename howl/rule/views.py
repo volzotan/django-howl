@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django import forms
 from django.core.exceptions import ValidationError
 
+from models import OPTION
 from models import Rule
 from howlcore import core
 
@@ -126,6 +127,14 @@ class NewRuleForm(forms.Form):
         self.cleaned_data["destination_model"] = destination_model
         self.cleaned_data["destination_instance"] = destination_instance
 
+        # check if origin_value is supplied if option not E
+
+        if self.cleaned_data["option"][0] != OPTION.EXISTENCE and (self.cleaned_data["origin_value"] is None or self.cleaned_data["origin_value"] == ""):
+            raise ValidationError(
+                'Invalid value for origin_value: %(value)s',  # TODO
+                code='invalid',
+                params={'value': self.cleaned_data["origin_value"]},
+            )
 
 def index(request):
     context = {}
@@ -160,7 +169,7 @@ def display(request, rule_name):
         return HttpResponseRedirect('/rule/')
 
 
-def add(request):
+def add(request):  # brace yourself traveler, scary code ahead
 
     if request.method == 'POST':
         form = NewRuleForm(request.POST)
