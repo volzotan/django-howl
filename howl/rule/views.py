@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from models import Rule
 from howlcore import core
 
-from django.utils.encoding import force_text
+from django.contrib.contenttypes.models import ContentType
 
 import json
 
@@ -42,12 +42,16 @@ class NewRuleForm(forms.Form):
 
     def clean_name(self):
         if len(Rule.objects.filter(name=self.cleaned_data["name"])) != 0:
-            return False
-        return True
+            raise ValidationError(
+                    'duplicate name: %(value)s',
+                    code='invalid',
+                    params={'value': self.cleaned_data["name"]},
+                )
+        return self.cleaned_data["name"]
 
     def _check_for_existence(self, device_class_name, instance_name):
 
-        origin_instance = None
+        device_instance = None
 
         device_list = core.get_devices()
         success = False
@@ -56,7 +60,7 @@ class NewRuleForm(forms.Form):
                 for inst in elem.objects.all():
                     if instance_name == inst.name:
                         success = True
-                        origin_instance = inst
+                        device_instance = (elem, inst)
                         break
 
                 if not success:
@@ -73,7 +77,7 @@ class NewRuleForm(forms.Form):
                 params={'value': device_class_name},
             )
 
-        return origin_instance
+        return device_instance
 
     def clean(self):
         # check if origin_name exists, and if in device-list
@@ -82,7 +86,9 @@ class NewRuleForm(forms.Form):
         device_class_name = data_origin_name[0:data_origin_name.find('.')]
         instance_name = data_origin_name[data_origin_name.find('.')+1:]
 
-        origin_instance = self._check_for_existence(device_class_name, instance_name)
+        tmp = self._check_for_existence(device_class_name, instance_name)
+        origin_model = tmp[0]
+        origin_instance = tmp[1]
         
         # and has the given origin_attribute
 
@@ -99,7 +105,10 @@ class NewRuleForm(forms.Form):
         device_class_name = data_destination_name[0:data_destination_name.find('.')]
         instance_name = data_destination_name[data_destination_name.find('.')+1:]
 
-        destination_instance = self._check_for_existence(device_class_name, instance_name)
+
+        tmp = self._check_for_existence(device_class_name, instance_name)
+        destination_model = tmp[0]
+        destination_instance = tmp[1]
 
         # and has the given destination_method
 
@@ -111,6 +120,11 @@ class NewRuleForm(forms.Form):
                 code='invalid',
                 params={'value': self.cleaned_data["destination_method"]},
             )
+
+        self.cleaned_data["origin_model"] = origin_model
+        self.cleaned_data["origin_instance"] = origin_instance
+        self.cleaned_data["destination_model"] = destination_model
+        self.cleaned_data["destination_instance"] = destination_instance
 
 
 def index(request):
@@ -152,11 +166,33 @@ def add(request):
         form = NewRuleForm(request.POST)
 
         if form.is_valid():
-            # print form.cleaned_data["name"]
-            # print form.cleaned_data["origin_name"]
-            # print form.cleaned_data["origin_attribute"]
-            # print form.cleaned_data["option"]
-            # print form.cleaned_data["origin_value"]
+
+            rule = Rule()
+            rule.name = form.cleaned_data["name"]
+
+            for app in core.get_apps():
+                for model in app.get_models():
+                    for inst in model.objects.all():
+                        if inst == form.cleaned_data["origin_instance"]:
+                            rule.origin_device_type = ContentType.objects.get(app_label=app.name, model=model.__name__.lower())
+                            break
+
+            rule.option = form.cleaned_data["option"]
+            # rule.origin_object_id = rule.origin_device_type.get_object_for_this_type().__cls__.objects.filter(name=form.cleaned_data["origin_instance"].name)
+            rule.origin_object_id = form.cleaned_data["origin_instance"].pk
+            rule.origin_attribute = form.cleaned_data["origin_attribute"]
+
+            for app in core.get_apps():
+                for model in app.get_models():
+                    for inst in model.objects.all():
+                        if inst == form.cleaned_data["destination_instance"]:
+                            rule.destination_device_type = ContentType.objects.get(app_label=app.name, model=model.__name__.lower())
+                            break
+
+            rule.destination_object_id = form.cleaned_data["destination_instance"].pk
+            rule.destination_method = form.cleaned_data["destination_method"]
+
+            rule.save()
 
             return HttpResponseRedirect('/rule/')
         else:
