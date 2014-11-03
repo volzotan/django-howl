@@ -5,4 +5,4 @@ from howlcore import core
 
 @shared_task
 def ping_devices():
-    core.check_for_responding_devices()
+    core.ping_all_devices()

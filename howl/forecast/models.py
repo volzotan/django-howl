@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 class Forecast(core.Device, core.Sensor):
 
+    attributes = ["read"]
+
     location = models.CharField(max_length=100)
     api_key  = models.CharField(max_length=100)
 
@@ -83,7 +85,9 @@ class Forecast(core.Device, core.Sensor):
 
                 self.save()
         except Exception as e:
-            logger.error("forecast " + self.name + " read failed", exc_info=True)
+            logger.error("forecast {0} read failed".format(self.name), exc_info=True)
             self.status = core.StatusType.ERROR
             self.save()
             raise SensorReadError(e)
+
+    # TODO: def ping(self):

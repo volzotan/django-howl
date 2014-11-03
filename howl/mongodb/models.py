@@ -12,6 +12,9 @@ logger = logging.getLogger(__name__)
 DEVICE_TYPE = core.DeviceType.INTERFACE
 
 class Mongodb(core.Device, core.Interface):
+
+    attributes = ["read", "write"]
+
     username = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
     url = models.CharField(max_length=200)
@@ -24,6 +27,7 @@ class Mongodb(core.Device, core.Interface):
         self.connection = pymongo.Connection("mongodb://" + self.username + ":" + self.password + "@" + self.url)
         self.db = self.connection[self.database_name]
         self.collection = self.db[self.collection_name]
+        self.document_count = self.collection.count()
 
     # def check(self):
     #     try:
@@ -57,5 +61,15 @@ class Mongodb(core.Device, core.Interface):
         self.last_active = datetime.datetime.utcnow().replace(tzinfo=utc)
         self.save()
 
-    def __unicode__(self):
-        return self.name
+    def ping(self):
+        try:
+            self.init()
+            self.collection.find()
+            self.status = core.StatusType.OK
+            logger.debug("mongodb {0} ping ok".format(self.name))
+        except Exception:
+            logger.error("mongodb {0} ping failed".format(self.name), exc_info=True)
+            self.status = core.StatusType.ERROR
+        finally:
+            self.save()
+            return self.status

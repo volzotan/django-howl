@@ -15,6 +15,7 @@ set terminal png linewidth 2
 set ytics font "Fira Mono Bold, 12"
 
 set xtics format " "
+set xtics 3600
 
 set multiplot layout 3,1 columnsfirst scale 1,1
 

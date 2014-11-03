@@ -7,3 +7,6 @@ howl/forecast/fixtures
 howl/inkdisplay/fixtures
 howl/relay/fixtures
 howl/weekstat/fixtures
+howl/mongodb/migrations
+howl/roomsensor/migrations
+howl/rule/migrations

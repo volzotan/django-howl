@@ -14,11 +14,13 @@ DEVICE_TYPE = core.DeviceType.SENSOR
 
 logger = logging.getLogger(__name__)
 
+
 class Roomsensor(core.Device, core.Sensor):
+    attributes = ["read"]
     data = ["luminosity", "temperature", "humidity"]
 
     ip_address = models.GenericIPAddressField()
-    url = models.CharField(max_length=200)  # '/sensorData'
+    url = models.CharField(max_length=200)
     db = models.ForeignKey(Mongodb)
 
     luminosity = models.FloatField(blank=True, null=True)
@@ -45,9 +47,10 @@ class Roomsensor(core.Device, core.Sensor):
                 self.status = core.StatusType.OK
                 self.save()
         except SensorReadError as e:
+            logger.error("roomsensor " + self.name + " read failed", exc_info=True)
             self.status = core.StatusType.ERROR
             self.save()
-            raise e
+            raise
         except Exception as e:
             logger.error("roomsensor " + self.name + " read failed", exc_info=True)
             self.status = core.StatusType.NOT_RESPONDING
@@ -56,23 +59,22 @@ class Roomsensor(core.Device, core.Sensor):
 
 
     def ping(self):
-        conn = httplib.HTTPConnection(self.ip_address)
         try:
+            conn = httplib.HTTPConnection(self.ip_address)
             conn.request("GET", self.url)
             response = conn.getresponse()
             if (response.status != 200):
-                logger.error("roomsensor ping failed: " + str(response.status) + " (" + response.reason + ")" )
+                logger.error("roomsensor ping failed: " + str(response.status) + " (" + response.reason + ")")
                 raise SensorReadError({response.status, response.reason})
             else:
-                logger.debug("roomsensor " + self.name + " ping ok", exc_info=True)
+                logger.debug("roomsensor {0} ping ok".format(self.name))
                 self.status = core.StatusType.OK
-                self.save()
-        except SensorReadError as e:
+        except SensorReadError:
+            logger.error("roomsensor {0} ping failed".format(self.name), exc_info=True)
             self.status = core.StatusType.ERROR
-            self.save()
         except:
-            logger.error("roomsensor " + self.name + " ping failed", exc_info=True)
+            logger.error("roomsensor {0} ping failed".format(self.name), exc_info=True)
             self.status = core.StatusType.NOT_RESPONDING
+        finally:
             self.save()
-
-        return self.status
+            return self.status

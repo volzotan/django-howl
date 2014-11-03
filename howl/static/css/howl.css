@@ -1,5 +1,9 @@
 /* ---------- HOWL THEME ---------- */
 
+.form-error {
+    border-color: #FF0000;
+}
+
 .lastactive {
   float: right;
   color: #999999;

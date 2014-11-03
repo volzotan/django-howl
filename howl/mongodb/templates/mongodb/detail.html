@@ -10,11 +10,7 @@
 
 <ul class="list-group">
     <li class="list-group-item">
-        {% if mongodb.is_responding %}
-            <span class="label label-success">is responding</span>
-        {% else %}
-            <span class="label label-danger">not responding</span>
-        {% endif %}
+        document count: {{ mongodb.document_count }}
     </li>
 </ul>
 

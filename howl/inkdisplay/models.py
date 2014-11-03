@@ -18,6 +18,9 @@ logger = logging.getLogger(__name__)
 DEVICE_TYPE = core.DeviceType.INTERFACE
 
 class Inkdisplay(core.Device, core.Interface):
+
+    attributes = ["write"]
+
     forecast = models.ForeignKey(Forecast)
     db = models.ForeignKey(Mongodb)
 
@@ -82,13 +85,7 @@ class Inkdisplay(core.Device, core.Interface):
             logger.warn("converting inkdisplay output image failed")
             raise Exception("script returned non zero exit code")
 
-        logger.debug("inkdisplay " + self.name + " write successfull")
+        logger.debug("inkdisplay {0} write successful".format(self.name))
         self.last_active = datetime.datetime.utcnow().replace(tzinfo=utc)
         self.status = core.StatusType.OK
         self.save()
-
-    def ping(self):
-        self.status = core.StatusType.OK
-        self.save()
-        logger.debug("inkdisplay " + self.name + " ping successfull")
-        return True

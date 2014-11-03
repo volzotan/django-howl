@@ -41,7 +41,6 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
 # Application definition
-# djcelery outdated and not needed anymore, but allows "manage.py celery" commands, used in supervisor.conf
 
 INSTALLED_APPS = (
     'django.contrib.admin',
@@ -50,8 +49,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'djcelery',
     'howlcore',
+    'rule',
+
     'roomsensor',
     'mongodb',
     'forecast',
