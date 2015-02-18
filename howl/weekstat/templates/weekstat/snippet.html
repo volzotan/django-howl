@@ -4,10 +4,15 @@
 
 <style>
 
-.chart circle {
+.chart rect {
   fill: #F0AD4E;
   stroke: #F0AD4E;
   stroke-width: 2px;
+}
+
+.chart rect.background {
+  fill: #FFFFFF;
+  stroke-width: 0px;
 }
 
 .chart text {
@@ -17,7 +22,7 @@
 }
 
 .chart g:hover text {
-  fill: #FFF;
+  /* fill: #FFF; */
 }
 
 .chart g:hover .day {
@@ -28,7 +33,7 @@
   fill: #888;
 }
 
-.chart g:hover circle {
+.chart g:hover bar {
   /* fill: #FAFAFA; */
 }
 
@@ -134,8 +139,8 @@ var data;
 
 function draw_graph(container_name) {
     var width = 450,
-        height = 130,
-        circleSize = 30;
+        height = 100,
+        circleSize = 70;
 
     var x = d3.scale.linear()
         .domain([0, circleSize])
@@ -145,24 +150,30 @@ function draw_graph(container_name) {
         .attr("width", width)
         .attr("height", height);
 
-    var circ = chart.selectAll("g")
+    var bar = chart.selectAll("g")
         .data(data)
       .enter().append("g")
         .attr("transform", function(d, i) { return "translate(" + i * 70 + ", 0)"; });
 
-    circ.append("circle")
-        .attr("cx", 50)
-        .attr("cy", 50)
-        .attr("r", function(d) { return d * circleSize; });
+    bar.append("rect")
+        .attr("x", 18)
+        .attr("width", 66)
+        .attr("height", height)
+        .attr("class", "background")
 
-    circ.append("text")
+    bar.append("rect")
+        .attr("x", 18)
+        .attr("width", 66)
+        .attr("height", function(d) { return d * circleSize; });
+
+    bar.append("text")
         .attr("x", 50)
-        .attr("y", 56)
+        .attr("y", height - 3)
         .text(function(d) { return d3.round(d * 100,0) }); // + "%"; });
 
-    circ.append("text")
+    bar.append("text")
         .attr("x", 50)
-        .attr("y", 110)
+        .attr("y", height - 22)
         .attr("class", "day")
         .text(function(d, i) { 
             var d = new Date();
